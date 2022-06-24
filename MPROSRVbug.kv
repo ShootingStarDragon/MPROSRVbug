@@ -1,0 +1,73 @@
+#:import os os
+#:import sys sys
+
+<Manachan>:
+    id: manachanID
+    SelectionScreen:
+        id: selectscreenID
+        name: 'selectscreen'
+        manager: 'manachanID'
+
+<SelectionScreen>:
+    id: selectionscreenid
+    BoxLayout:
+        orientation: 'horizontal'
+        Video:
+            id: previewVideo
+        SongList:
+            id: songlistid
+
+<SongList>
+    cols: 1
+    size_hint_x: 1
+    #size_hint_x: 0.3
+    #spacing: '10dp'
+    
+    BoxLayout:
+        size_hint: (1,.1)
+        orientation: 'vertical'
+    
+        Label:
+            id: songtitle
+            #background_color: (1, 1, 1, 0)
+            #literally drawing a rectangle of that color in the background https://stackoverflow.com/a/20872657/16355112
+            canvas.before:
+                Color:
+                    rgba: (.3, .3, .3, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+    #use recycle view for optimization
+    RV:
+        id: recycle_grid1
+        size_hint_x: 1
+    
+<RV>:
+    viewclass: 'SongLinkButton'
+    SelectableRecycleBoxLayout:
+        id: recycle_grid2
+        default_size: None, dp(120)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+        #key_selection: 'selected'
+
+<SongLinkButton>:
+    id: songbutton
+    orientation: 'horizontal'
+    height: '80dp'
+    # Draw a background to indicate selection
+    canvas.before:
+        Color:
+            #https://stackoverflow.com/questions/55292652/recycleview-and-screenmanager-problems
+            #this is the real answer: https://stackoverflow.com/questions/50362476/attributeerror-mainrouter-object-has-no-attribute-disabled-count
+            rgba: (.0, 0.9, .1, .3) if self.selected else (0, 0, 0, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        id: textinfo
+        text_size: self.width, None
+        
